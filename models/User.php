@@ -4,15 +4,12 @@ namespace app\models;
 
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
-	
-
-
     /**
      * {@inheritdoc}
      */
     public static function findIdentity($id)
     {
-		return static::findOne($id);
+        return static::findOne($id);
     }
 
     /**
@@ -20,7 +17,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-
         return null;
     }
 
@@ -32,8 +28,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public static function findByUsername($username)
     {
-        
-		return static::findOne(['username' => $username]);
+        return static::findOne(['username' => $username]);
     }
 
     /**
@@ -68,6 +63,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function validatePassword($password)
     {
-		 return \Yii::$app->security->validatePassword($password, $this->password);
+        return \Yii::$app->security->validatePassword($password, $this->password);
     }
 }
