@@ -78,8 +78,9 @@ class SiteController extends Controller
         $model = new Post();
         if($model->load(Yii::$app->request->post())){
             $model->author_id = Yii::$app->user->id;
-            $model->date_created = date("Y-m-d H:i:s");
+            //$model->date_created = date("Y-m-d H:i:s");
             $model->save();
+            //print_r($model->getErrors()); exit;
         }
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -193,7 +194,7 @@ class SiteController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->date_updated = date("Y-m-d H:i:s");
+            //$model->date_updated = date("Y-m-d H:i:s");
             $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }

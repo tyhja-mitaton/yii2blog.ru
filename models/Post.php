@@ -3,6 +3,9 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use \yii\db\ActiveRecord;
+use \yii\db\Expression;
 
 /**
  * This is the model class for table "{{%post}}".
@@ -16,7 +19,7 @@ use Yii;
  *
  * @property User $author
  */
-class Post extends \yii\db\ActiveRecord
+class Post extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -38,6 +41,26 @@ class Post extends \yii\db\ActiveRecord
             [['date_created', 'date_updated'], 'safe'],
             [['title'], 'string', 'max' => 255],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'date_created',
+                'updatedAtAttribute' => 'date_updated',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['date_created', 'date_updated'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['date_updated'],
+                ],
+                // если вместо метки времени UNIX используется datetime:
+                 'value' => new Expression('NOW()'),
+            ],
         ];
     }
 
