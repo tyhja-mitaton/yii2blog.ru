@@ -80,7 +80,6 @@ class SiteController extends Controller
             $model->author_id = Yii::$app->user->id;
             //$model->date_created = date("Y-m-d H:i:s");
             $model->save();
-            //print_r($model->getErrors()); exit;
         }
         return $this->render('index', [
             'dataProvider' => $dataProvider,

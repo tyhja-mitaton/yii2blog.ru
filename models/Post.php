@@ -51,15 +51,11 @@ class Post extends ActiveRecord
     {
         return [
             [
-                'class' => TimestampBehavior::className(),
+                'class' => TimestampBehavior::class,
                 'createdAtAttribute' => 'date_created',
                 'updatedAtAttribute' => 'date_updated',
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['date_created', 'date_updated'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['date_updated'],
-                ],
                 // если вместо метки времени UNIX используется datetime:
-                 'value' => new Expression('NOW()'),
+                 'value' => date("Y-m-d H:i:s"),
             ],
         ];
     }
