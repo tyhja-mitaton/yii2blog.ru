@@ -5,7 +5,6 @@ namespace app\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use \yii\db\ActiveRecord;
-use \yii\db\Expression;
 
 /**
  * This is the model class for table "{{%post}}".
@@ -16,7 +15,7 @@ use \yii\db\Expression;
  * @property int $author_id
  * @property string $date_created
  * @property string $date_updated
- *
+ * @property boolean $checked
  * @property User $author
  */
 class Post extends ActiveRecord
@@ -36,11 +35,12 @@ class Post extends ActiveRecord
     {
         return [
             [['content'], 'string'],
-            [['author_id', 'date_created'], 'required'],
+            [['author_id'], 'required'],
             [['author_id'], 'integer'],
             [['date_created', 'date_updated'], 'safe'],
             [['title'], 'string', 'max' => 255],
-            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
+            //[['checked'],'boolean'],
+            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
         ];
     }
 
@@ -80,6 +80,6 @@ class Post extends ActiveRecord
      */
     public function getAuthor()
     {
-        return $this->hasOne(User::className(), ['id' => 'author_id']);
+        return $this->hasOne(User::class, ['id' => 'author_id']);
     }
 }

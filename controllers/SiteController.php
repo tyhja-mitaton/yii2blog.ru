@@ -14,6 +14,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\SignupForm;
 use app\models\User;
+use yii\web\ForbiddenHttpException;
 
 class SiteController extends Controller
 {
@@ -78,7 +79,7 @@ class SiteController extends Controller
         $model = new Post();
         if($model->load(Yii::$app->request->post())){
             $model->author_id = Yii::$app->user->id;
-            //$model->date_created = date("Y-m-d H:i:s");
+            $model->checked = (Yii::$app->user->can('create-post'))?true:false;
             $model->save();
         }
         return $this->render('index', [
@@ -161,7 +162,10 @@ class SiteController extends Controller
             $user->password = \Yii::$app->security->generatePasswordHash($model->password);
             $user->auth_key = \Yii::$app->security->generateRandomString();
             $user->access_token = \Yii::$app->security->generateRandomString();
+            $user->role = 'user';
             if ($user->save()) {
+                $userRole = Yii::$app->authManager->getRole('user');
+                Yii::$app->authManager->assign($userRole, $user->getId());
                 return $this->goHome();
             }
         }
@@ -193,7 +197,7 @@ class SiteController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            //$model->date_updated = date("Y-m-d H:i:s");
+            $model->checked = (Yii::$app->user->can('update-post'))?true:false;
             $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -209,9 +213,13 @@ class SiteController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws ForbiddenHttpException if user has no permissions
      */
     public function actionDelete($id)
     {
+        if(!Yii::$app->user->can('delete')){
+            throw new ForbiddenHttpException('Access denied');
+        }
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

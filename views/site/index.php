@@ -24,9 +24,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
     foreach ($dataProvider->models as $model) {
-        echo $this->render('preview', [
-            'model' => $model
-        ]);
+        if($model->checked){
+            echo $this->render('preview', [
+                'model' => $model
+            ]);
+        }
     }
     ?>
 
