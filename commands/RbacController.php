@@ -5,9 +5,7 @@ namespace app\commands;
 
 use Yii;
 use yii\console\Controller;
-use \app\rbac\UserGroupRule;
 use \app\rbac\AuthorRule;
-use app\models\User;
 
 
 class RbacController extends Controller
@@ -52,15 +50,6 @@ class RbacController extends Controller
         $authManager->add($editor);
         $authManager->add($user);
 
-        //add rule
-        $userGroupRule = new UserGroupRule();
-        $authManager->add($userGroupRule);
-
-        //add rule in roles
-        $guest->ruleName  = $userGroupRule->name;
-        $moderator->ruleName  = $userGroupRule->name;
-        $editor->ruleName  = $userGroupRule->name;
-        $user->ruleName  = $userGroupRule->name;
 
         //add permission per role
         $authManager->addChild($guest, $login);
@@ -97,9 +86,6 @@ class RbacController extends Controller
     {
         $userRole = Yii::$app->authManager->getRole($user_role);
         Yii::$app->authManager->assign($userRole, $user_id);
-        $user = User::findIdentity($user_id);
-        $user->role = $user_role;
-        $user->save();
     }
 
 }

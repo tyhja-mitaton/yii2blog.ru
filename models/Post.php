@@ -39,7 +39,6 @@ class Post extends ActiveRecord
             [['author_id'], 'integer'],
             [['date_created', 'date_updated'], 'safe'],
             [['title'], 'string', 'max' => 255],
-            //[['checked'],'boolean'],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
         ];
     }

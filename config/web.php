@@ -45,7 +45,6 @@ $config = [
         'db' => $db,
         'authManager' => [
             'class' => 'yii\rbac\PhpManager',
-            'defaultRoles' => ['moderator', 'editor', 'user'],
         ]
         /*
         'urlManager' => [

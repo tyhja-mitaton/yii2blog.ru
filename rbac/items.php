@@ -32,7 +32,6 @@ return [
     ],
     'guest' => [
         'type' => 1,
-        'ruleName' => 'userGroup',
         'children' => [
             'login',
             'logout',
@@ -42,7 +41,6 @@ return [
     ],
     'moderator' => [
         'type' => 1,
-        'ruleName' => 'userGroup',
         'children' => [
             'delete',
             'check-post',
@@ -53,7 +51,6 @@ return [
     ],
     'editor' => [
         'type' => 1,
-        'ruleName' => 'userGroup',
         'children' => [
             'create-post',
             'update-post',
@@ -63,7 +60,6 @@ return [
     ],
     'user' => [
         'type' => 1,
-        'ruleName' => 'userGroup',
         'children' => [
             'write-post',
             'guest',
