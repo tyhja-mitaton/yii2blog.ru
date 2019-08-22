@@ -46,12 +46,14 @@ class UsersManagerController extends Controller
         }
         $user_roles_ar = Yii::$app->authManager->getRolesByUser($id);
         $is_editor = array_key_exists('editor', $user_roles_ar);
-        switch ($role){
-            case $role == 'user':
-                {Yii::$app->authManager->revoke(Yii::$app->authManager->getRole('editor'), $id);}
+        switch ($role) {
+            case 'user':
+                {
+                    Yii::$app->authManager->revoke(Yii::$app->authManager->getRole('editor'), $id);
+                }
                 break;
-            case $role == 'editor' :
-                if (!$is_editor){
+            case 'editor' :
+                if (!$is_editor) {
                     $userRole = Yii::$app->authManager->getRole($role);
                     Yii::$app->authManager->assign($userRole, $id);
                 }
