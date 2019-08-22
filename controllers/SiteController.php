@@ -71,7 +71,6 @@ class SiteController extends Controller
             'query' => Post::find(),
         ]);
         if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('notLoggedIn');
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
             ]);
@@ -191,10 +190,15 @@ class SiteController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws ForbiddenHttpException if user has no permission
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if(!Yii::$app->user->can('update-post', ['post' => $model])){
+            throw new ForbiddenHttpException('Access denied');
+        }
+
 
         if ($model->load(Yii::$app->request->post())) {
             $model->checked = (Yii::$app->user->can('update-post'))?true:false;

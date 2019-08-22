@@ -6,6 +6,7 @@ namespace app\commands;
 use Yii;
 use yii\console\Controller;
 use \app\rbac\UserGroupRule;
+use \app\rbac\AuthorRule;
 use app\models\User;
 
 
@@ -26,7 +27,8 @@ class RbacController extends Controller
         $logout = $authManager->createPermission('logout');
         $error  = $authManager->createPermission('error');
         $signUp = $authManager->createPermission('sign-up');
-        $createPost = $authManager->createPermission('create-post');
+        $writePost = $authManager->createPermission('write-post');//предложить запись
+        $createPost = $authManager->createPermission('create-post');//запись без модерации
         $updatePost = $authManager->createPermission('update-post');
         $delete = $authManager->createPermission('delete');
         $checkPost = $authManager->createPermission('check-post');
@@ -37,6 +39,7 @@ class RbacController extends Controller
         $authManager->add($logout);
         $authManager->add($error);
         $authManager->add($signUp);
+        $authManager->add($writePost);
         $authManager->add($createPost);
         $authManager->add($updatePost);
         $authManager->add($delete);
@@ -65,11 +68,12 @@ class RbacController extends Controller
         $authManager->addChild($guest, $error);
         $authManager->addChild($guest, $signUp);
         //user
-        $authManager->addChild($user, $updatePost);
+        $authManager->addChild($user, $writePost);
         $authManager->addChild($user, $guest);
         //editor
         $authManager->addChild($editor, $createPost);
         $authManager->addChild($editor, $updatePost);
+        $authManager->addChild($editor, $writePost);
         $authManager->addChild($editor, $guest);
         //moderator
         $authManager->addChild($moderator, $delete);
@@ -77,6 +81,16 @@ class RbacController extends Controller
         $authManager->addChild($moderator, $appoint);
         $authManager->addChild($moderator, $editor);
         $authManager->addChild($moderator, $user);
+
+        //пользователь может редактировать только свои посты
+        $authorRule = new AuthorRule();
+        $authManager->add($authorRule);
+        $updateOwnPost = $authManager->createPermission('update-own-post');
+        $updateOwnPost->description = 'Update own post';
+        $updateOwnPost->ruleName = $authorRule->name;
+        $authManager->add($updateOwnPost);
+        $authManager->addChild($updateOwnPost, $updatePost);
+        $authManager->addChild($user, $updateOwnPost);
     }
 
     public function actionAppoint($user_id, $user_role)

@@ -12,6 +12,9 @@ return [
     'sign-up' => [
         'type' => 2,
     ],
+    'write-post' => [
+        'type' => 2,
+    ],
     'create-post' => [
         'type' => 2,
     ],
@@ -54,6 +57,7 @@ return [
         'children' => [
             'create-post',
             'update-post',
+            'write-post',
             'guest',
         ],
     ],
@@ -61,8 +65,17 @@ return [
         'type' => 1,
         'ruleName' => 'userGroup',
         'children' => [
-            'update-post',
+            'write-post',
             'guest',
+            'update-own-post',
+        ],
+    ],
+    'update-own-post' => [
+        'type' => 2,
+        'description' => 'Update own post',
+        'ruleName' => 'isAuthor',
+        'children' => [
+            'update-post',
         ],
     ],
 ];

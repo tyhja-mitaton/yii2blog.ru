@@ -23,7 +23,7 @@ class UserGroupRule extends Rule
             }
 
         }
-        return true;
+        return false;
     }
 
 }

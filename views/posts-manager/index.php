@@ -4,7 +4,7 @@ use yii\helpers\Html;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $model app\models\Post */
 
-$this->title = 'Управление ролями';
+$this->title = 'Публикация записей';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

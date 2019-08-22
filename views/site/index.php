@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php if (Yii::$app->session->hasFlash('notLoggedIn')): ?>
+    <?php if(!Yii::$app->user->can('write-post')): ?>
         <p>Войдите в свой аккаунт чтобы оставить запись</p>
     <?php else: ?>
 
