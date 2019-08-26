@@ -3,6 +3,7 @@
 
 namespace app\controllers;
 
+use app\models\Category;
 use app\models\Post;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -22,7 +23,7 @@ class PostsManagerController extends Controller
             'query' => Post::find(),
         ]);
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'dataProvider' => $dataProvider
         ]);
     }
 
@@ -58,15 +59,18 @@ class PostsManagerController extends Controller
         }
 
         $model = $this->findModel($id);
+        $categories = Category::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->checked = true;
+            $model->category_id = Yii::$app->request->post()['Post']['category_id'];
             $model->save();
             return $this->redirect(['check', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'categories' => $categories
         ]);
     }
 

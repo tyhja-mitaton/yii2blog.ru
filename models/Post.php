@@ -17,6 +17,7 @@ use \yii\db\ActiveRecord;
  * @property string $date_updated
  * @property boolean $checked
  * @property User $author
+ * @property int $category_id
  */
 class Post extends ActiveRecord
 {
@@ -69,8 +70,8 @@ class Post extends ActiveRecord
             'title' => 'Заголовок',
             'content' => 'Сообщение',
             'author.username' => 'Автор',
-            'date_created' => 'Date Created',
-            'date_updated' => 'Date Updated',
+            'date_created' => 'Дата создания',
+            'date_updated' => 'Последнее обновление',
         ];
     }
 
@@ -81,4 +82,11 @@ class Post extends ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'author_id']);
     }
+
+    public function getCategory()
+    {
+        return $this->hasOne(Category::class, ['id' => 'category_id']);
+    }
+
 }
+

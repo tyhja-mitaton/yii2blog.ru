@@ -15,10 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?php if(Yii::$app->user->can('update-post') && !$model->checked){?>
+        <?php if (Yii::$app->user->can('update-post') && !$model->checked) { ?>
             <?= Html::a('Опубликовать', ['publish', 'id' => $model->id], ['class' => 'btn btn-primary'])
             ?>
-        <?php }if(Yii::$app->user->can('delete')){?>
+        <?php }
+        if (Yii::$app->user->can('delete')) { ?>
             <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
                 'data' => [
@@ -26,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'method' => 'post',
                 ],
             ]) ?>
-        <?php }?>
+        <?php } ?>
     </p>
 
     <?= DetailView::widget([
@@ -34,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
+            'category.title',
             'content:ntext',
             'author.username',
             'date_created',

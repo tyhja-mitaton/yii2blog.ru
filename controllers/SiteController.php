@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Category;
 use app\models\Post;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -76,14 +77,17 @@ class SiteController extends Controller
             ]);
         }
         $model = new Post();
+        $categories = Category::find()->all();
         if($model->load(Yii::$app->request->post())){
             $model->author_id = Yii::$app->user->id;
             $model->checked = (Yii::$app->user->can('create-post'))?true:false;
+            $model->category_id = Yii::$app->request->post()['Post']['category_id'];
             $model->save();
         }
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'model' => $model,
+            'categories' => $categories,
         ]);
     }
 

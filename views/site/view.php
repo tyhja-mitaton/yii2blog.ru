@@ -16,18 +16,19 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?php if(Yii::$app->user->can('update-post')){?>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary'])
-        ?>
-        <?php }if(Yii::$app->user->can('delete')){?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?php if (Yii::$app->user->can('update-post')) { ?>
+            <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary'])
+            ?>
+        <?php }
+        if (Yii::$app->user->can('delete')) { ?>
+            <?= Html::a('Delete', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
                 'data' => [
                     'confirm' => 'Are you sure you want to delete this item?',
                     'method' => 'post',
                 ],
             ]) ?>
-        <?php }?>
+        <?php } ?>
     </p>
 
     <?= DetailView::widget([
@@ -35,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
+            'category.title',
             'content:ntext',
             'author.username',
             'date_created',
