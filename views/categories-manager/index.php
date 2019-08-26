@@ -21,12 +21,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr style="background-color:#1a1a1a; height:2px">
     <?php
     foreach ($dataProvider->models as $model) {
-        $subCats = new ActiveDataProvider([
+        $subCategories = new ActiveDataProvider([
             'query' => Category::find()->where(['parent_id' => $model->id])
         ]);
         echo $this->render('category', [
             'model' => $model,
-            'subCats' => $subCats,
+            'subCategories' => $subCategories,
             'lvl' => 0
         ]);
     }
