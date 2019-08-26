@@ -27,6 +27,7 @@ class Category extends ActiveRecord
         return [
             [['title'], 'string', 'max' => 255],
             [['title'], 'required'],
+            ['parent_id', 'safe']
         ];
     }
 

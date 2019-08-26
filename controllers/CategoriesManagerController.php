@@ -21,11 +21,11 @@ class CategoriesManagerController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => Category::find()->where(['parent_id' => null]),
         ]);
-        $root_cat = new Category();
+        $rootCat = new Category();
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'root_cat' => $root_cat,
+            'rootCat' => $rootCat,
         ]);
     }
 
@@ -33,7 +33,6 @@ class CategoriesManagerController extends Controller
     {
         $category = new Category();
         if ($category->load(Yii::$app->request->post())) {
-            $category->parent_id = Yii::$app->request->post()['Category']['parent_id'];
             $category->save();
         }
         return $this->redirect(['index']);

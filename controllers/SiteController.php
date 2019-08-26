@@ -81,7 +81,6 @@ class SiteController extends Controller
         if($model->load(Yii::$app->request->post())){
             $model->author_id = Yii::$app->user->id;
             $model->checked = (Yii::$app->user->can('create-post'))?true:false;
-            $model->category_id = Yii::$app->request->post()['Post']['category_id'];
             $model->save();
         }
         return $this->render('index', [

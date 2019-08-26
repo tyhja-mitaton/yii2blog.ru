@@ -41,6 +41,7 @@ class Post extends ActiveRecord
             [['date_created', 'date_updated'], 'safe'],
             [['title'], 'string', 'max' => 255],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
+            ['category_id', 'safe']
         ];
     }
 

@@ -1,7 +1,7 @@
 <?php
 
 /* @var $model app\models\Category */
-/* @var $sub_cats yii\data\ActiveDataProvider */
+/* @var $subCats yii\data\ActiveDataProvider */
 
 /* @var $lvl integer */
 
@@ -15,15 +15,15 @@ use yii\data\ActiveDataProvider; ?>
         'model' => $model,
     ]) ?>
 </div>
-<?php if ($sub_cats != null) {
+<?php if ($subCats != null) {
     $lvl++;
-    foreach ($sub_cats->models as $sub_cat) {
-        $subsub_cats = new ActiveDataProvider([
-            'query' => Category::find()->where(['parent_id' => $sub_cat->id])
+    foreach ($subCats->models as $subCat) {
+        $subSubCats = new ActiveDataProvider([
+            'query' => Category::find()->where(['parent_id' => $subCat->id])
         ]);
         echo $this->render('category', [
-            'model' => $sub_cat,
-            'sub_cats' => $subsub_cats,
+            'model' => $subCat,
+            'subCats' => $subSubCats,
             'lvl' => $lvl
         ]);
     }
