@@ -21,11 +21,11 @@ class CategoriesManagerController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => Category::find()->where(['parent_id' => null]),
         ]);
-        $rootCat = new Category();
+        $rootCategory = new Category();
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'rootCat' => $rootCat,
+            'rootCategory' => $rootCategory,
         ]);
     }
 

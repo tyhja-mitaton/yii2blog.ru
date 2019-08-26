@@ -6,7 +6,7 @@ use yii\helpers\Html;
 
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $model app\models\Category */
-/* @var $rootCat app\models\Category */
+/* @var $rootCategory app\models\Category */
 
 $this->title = 'Управление категориями';
 $this->params['breadcrumbs'][] = $this->title;
@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="category-index">
     <h1><?= Html::encode($this->title) ?></h1>
     <?php echo $this->render('category', [
-        'model' => $rootCat,
+        'model' => $rootCategory,
         'lvl' => 0
     ]); ?>
     <hr style="background-color:#1a1a1a; height:2px">
