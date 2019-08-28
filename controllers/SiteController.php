@@ -16,6 +16,9 @@ use app\models\ContactForm;
 use app\models\SignupForm;
 use app\models\User;
 use yii\web\ForbiddenHttpException;
+use app\models\UploadImage;
+use app\models\Image;
+use yii\web\UploadedFile;
 
 class SiteController extends Controller
 {
@@ -78,15 +81,29 @@ class SiteController extends Controller
         }
         $model = new Post();
         $categories = Category::find()->all();
-        if($model->load(Yii::$app->request->post())){
+        $imageLoader = new UploadImage();
+        $image = new Image();
+
+        if ($model->load(Yii::$app->request->post())) {
             $model->author_id = Yii::$app->user->id;
-            $model->checked = (Yii::$app->user->can('create-post'))?true:false;
+            $model->checked = (Yii::$app->user->can('create-post')) ? true : false;
             $model->save();
+        }
+
+        if (Yii::$app->request->isPost) {
+            $imageLoader->image = UploadedFile::getInstance($imageLoader, 'image');
+            if ($imageLoader->image != null && $imageLoader->validate()) {
+                $imageLoader->image->saveAs("uploads/{$imageLoader->image->baseName}.{$imageLoader->image->extension}");
+                $image->post_id = $model->id;
+                $image->path = "{$imageLoader->image->baseName}.{$imageLoader->image->extension}";
+                $image->save();
+            }
         }
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'model' => $model,
             'categories' => $categories,
+            'imageLoader' => $imageLoader,
         ]);
     }
 
@@ -181,8 +198,10 @@ class SiteController extends Controller
      */
     public function actionView($id)
     {
+        $image= Image::findOne(['post_id' => $id]);
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'image' => $image
         ]);
     }
 
@@ -197,19 +216,34 @@ class SiteController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if(!Yii::$app->user->can('update-post', ['post' => $model])){
+        $categories = Category::find()->all();
+        $imageLoader = new UploadImage();
+        $image = Image::findOne(['post_id' => $id]);
+        if (!Yii::$app->user->can('update-post', ['post' => $model])) {
             throw new ForbiddenHttpException('Access denied');
         }
 
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->checked = (Yii::$app->user->can('update-post'))?true:false;
+            $model->checked = (Yii::$app->user->can('update-post')) ? true : false;
             $model->save();
+            if (Yii::$app->request->isPost) {
+                $imageLoader->image = UploadedFile::getInstance($imageLoader, 'image');
+                if ($imageLoader->image != null && $imageLoader->validate()) {
+                    $imageLoader->image->saveAs("uploads/{$imageLoader->image->baseName}.{$imageLoader->image->extension}");
+                    $image->post_id = $model->id;
+                    $image->path = "{$imageLoader->image->baseName}.{$imageLoader->image->extension}";
+                    $image->save();
+                }
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'categories' => $categories,
+            'imageLoader' => $imageLoader,
+            'image' => $image
         ]);
     }
 
@@ -229,6 +263,17 @@ class SiteController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionUpload()
+    {
+        $model = new UploadImage();
+        if(Yii::$app->request->isPost){
+            $model->image = UploadedFile::getInstance($model, 'image');
+            $model->upload();
+            return;
+        }
+        return $this->render('upload', ['model' => $model]);
     }
 
     /**

@@ -4,12 +4,15 @@
 namespace app\controllers;
 
 use app\models\Category;
+use app\models\Image;
 use app\models\Post;
+use app\models\UploadImage;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 
 class PostsManagerController extends Controller
@@ -39,8 +42,10 @@ class PostsManagerController extends Controller
         if (!Yii::$app->user->can('check-post')){
             throw new ForbiddenHttpException('Access denied');
         }
+        $image= Image::findOne(['post_id' => $id]);
         return $this->render('check', [
             'model' => $this->findModel($id),
+            'image' => $image
         ]);
     }
 
@@ -60,17 +65,30 @@ class PostsManagerController extends Controller
 
         $model = $this->findModel($id);
         $categories = Category::find()->all();
+        $imageLoader = new UploadImage();
+        $image = Image::findOne(['post_id' => $id]);
 
         if ($model->load(Yii::$app->request->post())) {
             $model->checked = true;
             $model->category_id = Yii::$app->request->post()['Post']['category_id'];
             $model->save();
+            if (Yii::$app->request->isPost) {
+                $imageLoader->image = UploadedFile::getInstance($imageLoader, 'image');
+                if ($imageLoader->image != null && $imageLoader->validate()) {
+                    $imageLoader->image->saveAs("uploads/{$imageLoader->image->baseName}.{$imageLoader->image->extension}");
+                    $image->post_id = $model->id;
+                    $image->path = "{$imageLoader->image->baseName}.{$imageLoader->image->extension}";
+                    $image->save();
+                }
+            }
             return $this->redirect(['check', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
-            'categories' => $categories
+            'categories' => $categories,
+            'imageLoader' => $imageLoader,
+            'image' => $image
         ]);
     }
 

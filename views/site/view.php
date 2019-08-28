@@ -5,6 +5,7 @@ use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Post */
+/* @var $image app\models\Image */
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Posts', 'url' => ['index']];
@@ -45,3 +46,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 </div>
+<?php if($image->post_id != null): ?>
+    <img src="<?=Yii::getAlias('@web') ?>/uploads/<?= $image->path?>" alt="" width="200px">
+<?php endif; ?>

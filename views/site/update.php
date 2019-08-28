@@ -4,6 +4,9 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Post */
+/* @var $categories array */
+/* @var $imageLoader app\models\UploadImage */
+/* @var $image app\models\Image */
 
 $this->title = 'Update Post: ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Posts', 'url' => ['index']];
@@ -16,6 +19,11 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'categories' => $categories,
+        'imageLoader' => $imageLoader
     ]) ?>
 
 </div>
+<?php if($image->post_id != null): ?>
+    <img src="<?=Yii::getAlias('@web') ?>/uploads/<?= $image->path?>" alt="" width="200px">
+<?php endif; ?>

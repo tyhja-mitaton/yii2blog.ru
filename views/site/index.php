@@ -1,11 +1,13 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\LinkPager;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $model app\models\Post */
 /* @var $categories array */
+/* @var $imageLoader app\models\UploadImage */
 
 $this->title = 'Блог';
 $this->params['breadcrumbs'][] = $this->title;
@@ -21,6 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $this->render('_form', [
             'model' => $model,
             'categories' => $categories,
+            'imageLoader' => $imageLoader
         ]) ?>
     <?php endif; ?>
 
@@ -35,3 +38,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
 </div>
+<?php echo LinkPager::widget([
+    'pagination' => $dataProvider->pagination
+]); ?>

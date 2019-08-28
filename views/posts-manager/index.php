@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\widgets\LinkPager;
 
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $model app\models\Post */
@@ -21,3 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
 </div>
+<?php echo LinkPager::widget([
+    'pagination' => $dataProvider->pagination
+]); ?>

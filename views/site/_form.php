@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 /* @var $model app\models\Post */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $categories array*/
+/* @var $imageLoader app\models\UploadImage */
 
 $items = ArrayHelper::map($categories, 'id', 'title');
 $params = ['prompt' => 'Выберите категорию'];
@@ -21,6 +22,8 @@ $params = ['prompt' => 'Выберите категорию'];
     <?= $form->field($model, 'category_id')->dropDownList($items, $params)->label('Категория') ?>
 
     <?= $form->field($model, 'content')->textarea(['rows' => 6, 'value' => '']) ?>
+    <?= $form->field($imageLoader, 'image')->fileInput()->label('Изображение')?>
+
 
 
     <div class="form-group">
